@@ -27,7 +27,7 @@ namespace imageTools {
 			 * @brief loads image
 			 * @param path path to image
 			 */
-			void load(std::string path, bool ignoreMagicNumber);
+			void load(std::string path, bool ignoreMagicNumber = false);
 	};
 }  // namespace imageTools
 

@@ -4,5 +4,6 @@
 using namespace imageTools;
 
 int main() {
-	ImageProcessor test("example.png");
+	pngProcessor test;
+	test.load("example.png");
 }

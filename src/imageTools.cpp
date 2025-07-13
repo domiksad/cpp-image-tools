@@ -1,5 +1,6 @@
 #include "imageTools.h"
 #include <fstream>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -15,7 +16,7 @@ namespace imageTools {
 		return value;
 	}
 
-	void pngProcessor::load(std::string path, bool ignoreMagicNumber = false) {
+	void pngProcessor::load(std::string path, bool ignoreMagicNumber) {
 		std::ifstream file(path, std::ios::binary);	 // Otwórz plik w trybie binarnym
 		if (!file) {
 			throw std::runtime_error("Can't open file: " + path);
@@ -44,6 +45,13 @@ namespace imageTools {
 			u_char lengthBuffer[4];
 			file.read(reinterpret_cast<char*>(lengthBuffer), 4);  // to sie kiedys na mnie zemści, rzutowanie wszystkiego za pomocą reinterpret
 			u_int32_t length = bytesToLong(lengthBuffer);
+			std::string chunkType(4, '\0');
+			file.read(&chunkType[0], 4);
+			u_char* data = new u_char[length];
+			file.read(reinterpret_cast<char*>(data), length);
+			file.seekg(4, std::ios::cur);  // pomiń crc
+			std::cout << "Length: " << length << " Chunk type: " << chunkType << " Data: " << data << "\n";
+			if (chunkType == "IEND") break;
 		}
 	}
 }  // namespace imageTools
